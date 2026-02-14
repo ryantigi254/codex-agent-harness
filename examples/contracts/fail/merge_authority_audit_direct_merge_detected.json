@@ -1,0 +1,15 @@
+{
+  "contract": "merge_authority_audit",
+  "expected_errors": [
+    "policy:merge_audit:direct_subagent_merge_forbidden"
+  ],
+  "payload": {
+    "run_id": "run-012",
+    "proposed_diff_count": 1,
+    "rejected_by_gate_count": 0,
+    "merged_by_governor_count": 1,
+    "direct_subagent_merge_detected": true,
+    "violations": ["direct_merge"],
+    "reason_codes": ["policy_violation/direct_subagent_merge"]
+  }
+}

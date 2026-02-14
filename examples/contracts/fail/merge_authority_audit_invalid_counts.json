@@ -1,0 +1,15 @@
+{
+  "contract": "merge_authority_audit",
+  "expected_errors": [
+    "policy:merge_audit:invalid_count_consistency"
+  ],
+  "payload": {
+    "run_id": "run-013",
+    "proposed_diff_count": 2,
+    "rejected_by_gate_count": 2,
+    "merged_by_governor_count": 2,
+    "direct_subagent_merge_detected": false,
+    "violations": [],
+    "reason_codes": []
+  }
+}

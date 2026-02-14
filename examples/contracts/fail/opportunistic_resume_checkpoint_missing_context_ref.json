@@ -1,0 +1,24 @@
+{
+  "contract": "opportunistic_resume_checkpoint",
+  "expected_errors": [
+    "schema:opportunistic_resume_checkpoint:missing:context_repo_ref"
+  ],
+  "payload": {
+    "run_id": "run-014",
+    "checkpoint_id": "ckpt-014",
+    "last_completed_work_item": {
+      "id": "item-4",
+      "status": "done"
+    },
+    "candidate_next_work_items": [
+      {
+        "id": "item-5",
+        "priority": 1,
+        "reason": "next"
+      }
+    ],
+    "selection_policy": "priority_then_recency",
+    "updated_at_unix": 1739500000,
+    "governor_gate_state": "ready"
+  }
+}

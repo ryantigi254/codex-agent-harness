@@ -1,0 +1,23 @@
+{
+  "contract": "harness_task_scorecard",
+  "expected_errors": [
+    "schema:harness_task_scorecard:missing:artefact_refs"
+  ],
+  "payload": {
+    "run_id": "run-2002",
+    "task_id": "A02",
+    "task_class": "research_pdf",
+    "timestamp_unix": 1739500000,
+    "stability_checks": {
+      "contracts_enforced": true,
+      "write_authority_safe": true,
+      "routing_predictable": true,
+      "debuggable_under_10m": true,
+      "cost_variance_bounded": true,
+      "learning_reversible": true
+    },
+    "harness_plumbing_change_required": false,
+    "failure_mode_codes": [],
+    "notes": "Missing artefact refs"
+  }
+}

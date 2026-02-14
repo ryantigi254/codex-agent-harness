@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "merge_authority_audit.schema.json",
+  "title": "MergeAuthorityAuditV1",
+  "type": "object",
+  "required": [
+    "run_id",
+    "proposed_diff_count",
+    "rejected_by_gate_count",
+    "merged_by_governor_count",
+    "direct_subagent_merge_detected",
+    "violations",
+    "reason_codes"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "proposed_diff_count": { "type": "integer", "minimum": 0 },
+    "rejected_by_gate_count": { "type": "integer", "minimum": 0 },
+    "merged_by_governor_count": { "type": "integer", "minimum": 0 },
+    "direct_subagent_merge_detected": { "type": "boolean" },
+    "violations": { "type": "array", "items": { "type": "string" } },
+    "reason_codes": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

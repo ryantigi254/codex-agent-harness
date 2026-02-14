@@ -1,0 +1,41 @@
+{
+  "contract": "harness_sufficiency_checkpoint",
+  "payload": {
+    "checkpoint_id": "cp-2001",
+    "window_start": 1739400000,
+    "window_end": 1739500000,
+    "task_pack_ref": "runbooks/checks/harness_sufficiency/task_pack_v1.json",
+    "runs": [
+      "run-01", "run-02", "run-03", "run-04", "run-05",
+      "run-06", "run-07", "run-08", "run-09", "run-10",
+      "run-11", "run-12", "run-13", "run-14", "run-15",
+      "run-16", "run-17", "run-18", "run-19", "run-20"
+    ],
+    "summary": {
+      "total_runs": 20,
+      "harness_plumbing_change_runs": 2,
+      "harness_plumbing_change_rate": 0.1,
+      "stability_criteria_pass_map": {
+        "contracts_enforced": true,
+        "write_authority_safe": true,
+        "routing_predictable": true,
+        "debuggable_under_10m": true,
+        "cost_variance_bounded": true,
+        "learning_reversible": true
+      },
+      "evidence_coverage_ratio": 1.0,
+      "routing_consistency_ratio": 0.9,
+      "cost_variance_by_class": {
+        "research_pdf": 0.2,
+        "repo_change": 0.25,
+        "deploy_flow": 0.3,
+        "long_form_factual": 0.2
+      }
+    },
+    "go_no_go": {
+      "status": "go",
+      "failed_conditions": [],
+      "recommended_actions": []
+    }
+  }
+}

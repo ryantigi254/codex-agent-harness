@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "harness_sufficiency_checkpoint.schema.json",
+  "title": "HarnessSufficiencyCheckpointV1",
+  "type": "object",
+  "required": [
+    "checkpoint_id",
+    "window_start",
+    "window_end",
+    "task_pack_ref",
+    "runs",
+    "summary",
+    "go_no_go"
+  ],
+  "properties": {
+    "checkpoint_id": { "type": "string" },
+    "window_start": { "type": "integer", "minimum": 0 },
+    "window_end": { "type": "integer", "minimum": 0 },
+    "task_pack_ref": { "type": "string" },
+    "runs": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 20,
+      "items": { "type": "string" }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "total_runs",
+        "harness_plumbing_change_runs",
+        "harness_plumbing_change_rate",
+        "stability_criteria_pass_map",
+        "evidence_coverage_ratio",
+        "routing_consistency_ratio",
+        "cost_variance_by_class"
+      ],
+      "properties": {
+        "total_runs": { "type": "integer", "minimum": 0 },
+        "harness_plumbing_change_runs": { "type": "integer", "minimum": 0 },
+        "harness_plumbing_change_rate": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "stability_criteria_pass_map": {
+          "type": "object",
+          "required": [
+            "contracts_enforced",
+            "write_authority_safe",
+            "routing_predictable",
+            "debuggable_under_10m",
+            "cost_variance_bounded",
+            "learning_reversible"
+          ],
+          "properties": {
+            "contracts_enforced": { "type": "boolean" },
+            "write_authority_safe": { "type": "boolean" },
+            "routing_predictable": { "type": "boolean" },
+            "debuggable_under_10m": { "type": "boolean" },
+            "cost_variance_bounded": { "type": "boolean" },
+            "learning_reversible": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        "evidence_coverage_ratio": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "routing_consistency_ratio": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "cost_variance_by_class": {
+          "type": "object",
+          "required": ["research_pdf", "repo_change", "deploy_flow", "long_form_factual"],
+          "properties": {
+            "research_pdf": { "type": "number", "minimum": 0.0 },
+            "repo_change": { "type": "number", "minimum": 0.0 },
+            "deploy_flow": { "type": "number", "minimum": 0.0 },
+            "long_form_factual": { "type": "number", "minimum": 0.0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "go_no_go": {
+      "type": "object",
+      "required": ["status", "failed_conditions", "recommended_actions"],
+      "properties": {
+        "status": { "type": "string", "enum": ["go", "no_go"] },
+        "failed_conditions": { "type": "array", "items": { "type": "string" } },
+        "recommended_actions": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "opportunistic_resume_checkpoint.schema.json",
+  "title": "OpportunisticResumeCheckpointV1",
+  "type": "object",
+  "required": [
+    "run_id",
+    "checkpoint_id",
+    "context_repo_ref",
+    "last_completed_work_item",
+    "candidate_next_work_items",
+    "selection_policy",
+    "updated_at_unix",
+    "governor_gate_state"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "checkpoint_id": { "type": "string" },
+    "context_repo_ref": { "type": "string" },
+    "last_completed_work_item": {
+      "type": "object",
+      "required": ["id", "status"],
+      "properties": {
+        "id": { "type": "string" },
+        "status": { "type": "string", "enum": ["done", "blocked", "skipped"] },
+        "artifact_ref": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "candidate_next_work_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "priority", "reason"],
+        "properties": {
+          "id": { "type": "string" },
+          "priority": { "type": "integer", "minimum": 1 },
+          "reason": { "type": "string" },
+          "source_ref": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "selection_policy": { "type": "string" },
+    "updated_at_unix": { "type": "integer", "minimum": 0 },
+    "governor_gate_state": { "type": "string", "enum": ["ready", "blocked", "pending_review"] },
+    "blocked_reasons": { "type": "array", "items": { "type": "string" } },
+    "retry_after_unix": { "type": "integer", "minimum": 0 },
+    "notes_ref": { "type": "string" }
+  },
+  "additionalProperties": false
+}

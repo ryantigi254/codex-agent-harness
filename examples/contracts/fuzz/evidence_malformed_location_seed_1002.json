@@ -1,0 +1,14 @@
+{
+  "contract": "evidence_object",
+  "seed": 1002,
+  "mutation_type": "malformed_location",
+  "expected_errors": [
+    "schema:evidence_object:location_object_required"
+  ],
+  "payload": {
+    "source": "url",
+    "location": "https://example.com",
+    "span": "snippet",
+    "confidence": 0.8
+  }
+}

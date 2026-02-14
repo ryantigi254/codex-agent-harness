@@ -1,0 +1,16 @@
+{
+  "contract": "evidence_object",
+  "seed": 1001,
+  "mutation_type": "missing_required",
+  "expected_errors": [
+    "schema:evidence_object:missing:source"
+  ],
+  "payload": {
+    "location": {
+      "path": "/tmp/report.pdf",
+      "page": 1
+    },
+    "span": "snippet",
+    "confidence": 0.5
+  }
+}

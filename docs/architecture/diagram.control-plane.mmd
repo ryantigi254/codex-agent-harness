@@ -1,0 +1,14 @@
+flowchart TB
+U["User"] --> MAIN["Main Agent Runtime"]
+MAIN --> SP["skill-picker-orchestrator"]
+SP --> TR["task-runbook-executor"]
+SP --> DAG["subagent-dag-orchestrator"]
+SP --> PL["logic-chain-task-planner"]
+
+PL --> PV["plan-validator-symbolic"] --> BT["build-things"] --> SC["self-correction-loop"]
+SC --> PL
+
+SP --> VG["validation-gate-runner"]
+VG --> PRR["project-run-reporter"]
+PRR --> ART["Run Artefacts"]
+PRR --> SCR["Project Scratchpads"]

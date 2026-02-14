@@ -28,9 +28,46 @@ jobs:
       - name: Policy gates
         run: python3 ./scripts/validate_contracts.py --policy-only
 
-  docs-consistency:
+  regression-pack:
     runs-on: ubuntu-latest
     needs: contracts-validate-strict
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regression pack
+        run: python3 ./scripts/validate_contracts.py --regression-pack
+
+  checkpoint-contracts:
+    runs-on: ubuntu-latest
+    needs: contracts-validate-strict
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkpoint contracts
+        run: python3 ./scripts/validate_contracts.py --strict
+
+  checkpoint-regression-pack:
+    runs-on: ubuntu-latest
+    needs: regression-pack
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkpoint regression pack
+        run: python3 ./scripts/validate_contracts.py --regression-pack
+
+  checkpoint-go-no-go-script:
+    runs-on: ubuntu-latest
+    needs:
+      - checkpoint-contracts
+      - checkpoint-regression-pack
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkpoint dry-run script
+        run: python3 ./scripts/run_harness_checkpoint.py --dry-run-fixtures
+
+  docs-consistency:
+    runs-on: ubuntu-latest
+    needs:
+      - policy-gates
+      - regression-pack
+      - checkpoint-go-no-go-script
     steps:
       - uses: actions/checkout@v4
       - name: Docs consistency

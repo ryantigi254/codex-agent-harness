@@ -4,6 +4,15 @@
   "boundaries_policy_id": "output-boundaries-v1",
   "merge_authority_policy_id": "merge-authority-v1",
   "reward_policy_id": "reward-policy-v1",
+  "governance_contract_ids": {
+    "output_boundaries": "output_boundaries",
+    "merge_authority_policy": "merge_authority_policy",
+    "reward_policy": "reward_policy",
+    "merge_authority_audit": "merge_authority_audit",
+    "opportunistic_resume_checkpoint": "opportunistic_resume_checkpoint",
+    "harness_task_scorecard": "harness_task_scorecard",
+    "harness_sufficiency_checkpoint": "harness_sufficiency_checkpoint"
+  },
   "contract_catalog": {
     "skill_result": "harness/skills/schemas/skill_result.schema.json",
     "evidence_object": "harness/skills/schemas/evidence_object.schema.json",
@@ -11,7 +20,11 @@
     "experience_packet": "harness/skills/schemas/experience_packet.schema.json",
     "output_boundaries": "harness/skills/schemas/output_boundaries.schema.json",
     "merge_authority_policy": "harness/skills/schemas/merge_authority_policy.schema.json",
-    "reward_policy": "harness/skills/schemas/reward_policy.schema.json"
+    "reward_policy": "harness/skills/schemas/reward_policy.schema.json",
+    "merge_authority_audit": "harness/skills/schemas/merge_authority_audit.schema.json",
+    "opportunistic_resume_checkpoint": "harness/skills/schemas/opportunistic_resume_checkpoint.schema.json",
+    "harness_task_scorecard": "harness/skills/schemas/harness_task_scorecard.schema.json",
+    "harness_sufficiency_checkpoint": "harness/skills/schemas/harness_sufficiency_checkpoint.schema.json"
   },
   "skills": [
     {
@@ -19,8 +32,12 @@
       "type": "orchestrator",
       "inputs_schema": "harness/skills/schemas/skill_request.schema.json",
       "outputs_schema": "harness/skills/schemas/skill_result.schema.json",
-      "depends_on": ["validation-gate-runner"],
-      "triggers": ["default_entrypoint"],
+      "depends_on": [
+        "validation-gate-runner"
+      ],
+      "triggers": [
+        "default_entrypoint"
+      ],
       "contract_ids": {
         "skill_result": "skill_result",
         "evidence_object": "evidence_object",

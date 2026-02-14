@@ -1,0 +1,21 @@
+{
+  "contract": "skill_result",
+  "seed": 1005,
+  "mutation_type": "extra_unexpected_fields",
+  "expected_errors": [
+    "schema:skill_result:unexpected_fields_present"
+  ],
+  "payload": {
+    "ok": true,
+    "outputs": {},
+    "tool_calls": [],
+    "cost_units": {
+      "time_ms": 1
+    },
+    "artefact_delta": {},
+    "failure_codes": [],
+    "rogue_blob": {
+      "too": "much"
+    }
+  }
+}

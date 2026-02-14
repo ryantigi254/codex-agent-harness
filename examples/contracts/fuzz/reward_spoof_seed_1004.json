@@ -1,0 +1,21 @@
+{
+  "contract": "reward_policy",
+  "seed": 1004,
+  "mutation_type": "reward_spoof",
+  "expected_errors": [
+    "policy:reward:activity_volume_reward_forbidden"
+  ],
+  "payload": {
+    "validator_improved": true,
+    "reward_components": {
+      "terminal": 0.0,
+      "progress_delta": 0.1,
+      "cost_penalty": 0.1,
+      "invalid_penalty": 0.0,
+      "no_progress_penalty": 0.0,
+      "spam_penalty": 0.0,
+      "reward_total": 0.0,
+      "skill_count_bonus": 3.0
+    }
+  }
+}

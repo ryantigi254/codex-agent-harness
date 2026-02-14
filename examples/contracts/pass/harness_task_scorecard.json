@@ -1,0 +1,27 @@
+{
+  "contract": "harness_task_scorecard",
+  "payload": {
+    "run_id": "run-2001",
+    "task_id": "A01",
+    "task_class": "research_pdf",
+    "timestamp_unix": 1739500000,
+    "artefact_refs": {
+      "skill_result_ref": "artefacts/run-2001/skill_result.json",
+      "validator_result_ref": "artefacts/run-2001/validator_result.json",
+      "experience_packet_ref": "artefacts/run-2001/experience_packet.json",
+      "merge_audit_ref": "artefacts/run-2001/merge_audit.json",
+      "checkpoint_ref": "runbooks/checks/harness_sufficiency/checkpoints/cp-2001.json"
+    },
+    "stability_checks": {
+      "contracts_enforced": true,
+      "write_authority_safe": true,
+      "routing_predictable": true,
+      "debuggable_under_10m": true,
+      "cost_variance_bounded": true,
+      "learning_reversible": true
+    },
+    "harness_plumbing_change_required": false,
+    "failure_mode_codes": [],
+    "notes": "Baseline valid scorecard"
+  }
+}

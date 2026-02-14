@@ -1,0 +1,18 @@
+{
+  "id": "harness_sufficiency_known_good",
+  "description": "Checkpoint known-good path",
+  "cases": [
+    {
+      "contract": "harness_task_scorecard",
+      "fixture": "pass/harness_task_scorecard.json",
+      "must_pass": true,
+      "expected_errors": []
+    },
+    {
+      "contract": "harness_sufficiency_checkpoint",
+      "fixture": "pass/harness_sufficiency_checkpoint.json",
+      "must_pass": true,
+      "expected_errors": []
+    }
+  ]
+}

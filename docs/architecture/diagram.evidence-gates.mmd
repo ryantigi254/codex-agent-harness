@@ -1,0 +1,16 @@
+flowchart TB
+REPO["Repo + Local Filesystem"] --> CR["cross-repo-pattern-scanner"]
+REPO --> PDF["pdf"]
+REPO --> DOC["doc"]
+
+PDF --> CTX["Large Context Store"]
+DOC --> CTX
+CR --> CTX
+PW["playwright"] --> WEB["Web / External Sources"]
+
+PDF --> SGE["source-grounding-enforcer"]
+DOC --> SGE
+PW --> SGE
+SGE --> VG["validation-gate-runner"]
+VG --> PRR["project-run-reporter"]
+PRR --> ART["Run Artefacts"]

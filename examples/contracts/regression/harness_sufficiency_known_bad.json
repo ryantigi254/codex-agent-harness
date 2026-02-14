@@ -1,0 +1,30 @@
+{
+  "id": "harness_sufficiency_known_bad",
+  "description": "Checkpoint known-bad path with stable reasons",
+  "cases": [
+    {
+      "contract": "harness_task_scorecard",
+      "fixture": "fail/harness_task_scorecard_missing_artefacts.json",
+      "must_pass": false,
+      "expected_errors": ["schema:harness_task_scorecard:missing:artefact_refs"]
+    },
+    {
+      "contract": "harness_task_scorecard",
+      "fixture": "fail/harness_task_scorecard_missing_stability_key.json",
+      "must_pass": false,
+      "expected_errors": ["schema:harness_task_scorecard:stability_check_missing:learning_reversible"]
+    },
+    {
+      "contract": "harness_sufficiency_checkpoint",
+      "fixture": "fail/harness_sufficiency_checkpoint_invalid_summary_math.json",
+      "must_pass": false,
+      "expected_errors": ["policy:harness_checkpoint:invalid_plumbing_rate_math"]
+    },
+    {
+      "contract": "harness_sufficiency_checkpoint",
+      "fixture": "fail/harness_sufficiency_checkpoint_inconsistent_status.json",
+      "must_pass": false,
+      "expected_errors": ["policy:harness_checkpoint:status_must_be_no_go_when_failed_conditions_present"]
+    }
+  ]
+}

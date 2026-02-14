@@ -1,0 +1,12 @@
+{
+  "id": "known_good_all_gates",
+  "description": "Known-good payloads must pass all hard gates",
+  "cases": [
+    {"contract": "skill_result", "fixture": "pass/skill_result.json", "must_pass": true, "expected_errors": []},
+    {"contract": "evidence_object", "fixture": "pass/evidence_object.json", "must_pass": true, "expected_errors": []},
+    {"contract": "validator_result", "fixture": "pass/validator_result.json", "must_pass": true, "expected_errors": []},
+    {"contract": "experience_packet", "fixture": "pass/experience_packet.json", "must_pass": true, "expected_errors": []},
+    {"contract": "merge_authority_audit", "fixture": "pass/merge_authority_audit.json", "must_pass": true, "expected_errors": []},
+    {"contract": "opportunistic_resume_checkpoint", "fixture": "pass/opportunistic_resume_checkpoint.json", "must_pass": true, "expected_errors": []}
+  ]
+}

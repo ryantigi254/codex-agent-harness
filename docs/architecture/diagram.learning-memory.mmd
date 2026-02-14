@@ -1,0 +1,13 @@
+flowchart TB
+PRR["project-run-reporter"] --> SGOV["scratchpad-governor"]
+SGOV --> MREPO["Context Memory Repo"]
+PRR --> SCR["Project Scratchpads"]
+IDLE["idle-time-opportunistic-maintainer"] --> SGOV
+IDLE --> MREPO
+
+DAG["subagent-dag-orchestrator"] -->|propose diffs only| SGOV
+VG["validation-gate-runner"] --> SGOV
+SGOV -->|governor-approved merge| MREPO
+
+CHK["opportunistic_resume_checkpoint"] --> MREPO
+AUD["merge_authority_audit"] --> SGOV

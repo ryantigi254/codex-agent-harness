@@ -1,0 +1,19 @@
+{
+  "contract": "opportunistic_resume_checkpoint",
+  "expected_errors": [
+    "policy:opportunistic_resume_checkpoint:ready_requires_candidates"
+  ],
+  "payload": {
+    "run_id": "run-015",
+    "checkpoint_id": "ckpt-015",
+    "context_repo_ref": "memory_repo/tasks/run-015.md",
+    "last_completed_work_item": {
+      "id": "item-8",
+      "status": "done"
+    },
+    "candidate_next_work_items": [],
+    "selection_policy": "priority_then_recency",
+    "updated_at_unix": 1739500000,
+    "governor_gate_state": "ready"
+  }
+}

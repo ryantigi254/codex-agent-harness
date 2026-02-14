@@ -1,0 +1,12 @@
+{
+  "contract": "merge_authority_audit",
+  "payload": {
+    "run_id": "run-011",
+    "proposed_diff_count": 5,
+    "rejected_by_gate_count": 2,
+    "merged_by_governor_count": 3,
+    "direct_subagent_merge_detected": false,
+    "violations": [],
+    "reason_codes": []
+  }
+}
