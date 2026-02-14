@@ -1,0 +1,13 @@
+{
+  "skills_version": "1.0",
+  "skills": [
+    {
+      "name": "skill-picker-orchestrator",
+      "type": "orchestrator",
+      "inputs_schema": "harness/skills/schemas/skill_request.schema.json",
+      "outputs_schema": "harness/skills/schemas/skill_result.schema.json",
+      "depends_on": ["validation-gate-runner"],
+      "triggers": ["default_entrypoint"]
+    }
+  ]
+}

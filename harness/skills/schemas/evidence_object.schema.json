@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence_object.schema.json",
+  "title": "EvidenceObject",
+  "type": "object",
+  "required": ["id", "type", "source", "captured_at"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": "string", "enum": ["file", "web", "screenshot", "log", "trace"] },
+    "source": { "type": "string" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "digest": { "type": "string" },
+    "metadata": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}

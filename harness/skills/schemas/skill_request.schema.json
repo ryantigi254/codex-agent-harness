@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "skill_request.schema.json",
+  "title": "SkillRequest",
+  "type": "object",
+  "required": ["request_id", "task", "context"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "task": { "type": "string" },
+    "context": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}

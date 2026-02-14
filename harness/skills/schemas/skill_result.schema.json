@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "skill_result.schema.json",
+  "title": "SkillResult",
+  "type": "object",
+  "required": ["skill", "status", "summary", "evidence_ids"],
+  "properties": {
+    "skill": { "type": "string" },
+    "status": { "type": "string", "enum": ["ok", "failed", "partial"] },
+    "summary": { "type": "string" },
+    "evidence_ids": { "type": "array", "items": { "type": "string" } },
+    "outputs": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}

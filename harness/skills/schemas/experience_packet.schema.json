@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "experience_packet.schema.json",
+  "title": "ExperiencePacket",
+  "type": "object",
+  "required": ["run_id", "outcome", "cost", "signals"],
+  "properties": {
+    "run_id": { "type": "string" },
+    "outcome": { "type": "string", "enum": ["success", "failure", "partial"] },
+    "cost": {
+      "type": "object",
+      "required": ["tokens", "latency_ms"],
+      "properties": {
+        "tokens": { "type": "integer", "minimum": 0 },
+        "latency_ms": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "signals": { "type": "array", "items": { "type": "string" } },
+    "artifacts": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

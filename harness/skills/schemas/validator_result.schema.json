@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validator_result.schema.json",
+  "title": "ValidatorResult",
+  "type": "object",
+  "required": ["gate", "passed", "reason_codes"],
+  "properties": {
+    "gate": { "type": "string" },
+    "passed": { "type": "boolean" },
+    "reason_codes": { "type": "array", "items": { "type": "string" } },
+    "details": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}
