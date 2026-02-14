@@ -1,23 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "experience_packet.schema.json",
-  "title": "ExperiencePacket",
+  "title": "ExperiencePacketV2",
   "type": "object",
-  "required": ["run_id", "outcome", "cost", "signals"],
+  "required": ["run_id", "task_signature", "skill_stack_used", "outcome", "gate_status", "evidence_refs", "reason_codes", "cost_proxy"],
   "properties": {
     "run_id": { "type": "string" },
+    "task_signature": { "type": "string" },
+    "skill_stack_used": { "type": "array", "items": { "type": "string" } },
     "outcome": { "type": "string", "enum": ["success", "failure", "partial"] },
-    "cost": {
+    "gate_status": {
+      "type": "object",
+      "required": ["passed"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "validator_result_ref": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "evidence_refs": { "type": "array", "items": { "type": "string" } },
+    "reason_codes": { "type": "array", "items": { "type": "string" } },
+    "cost_proxy": {
       "type": "object",
       "required": ["tokens", "latency_ms"],
       "properties": {
         "tokens": { "type": "integer", "minimum": 0 },
         "latency_ms": { "type": "integer", "minimum": 0 }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
-    "signals": { "type": "array", "items": { "type": "string" } },
-    "artifacts": { "type": "array", "items": { "type": "string" } }
+    "trajectory_ref": { "type": "string" },
+    "summary_ref": { "type": "string" },
+    "missing_actions": { "type": "array", "items": { "type": "string" } }
   },
   "additionalProperties": false
 }

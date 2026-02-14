@@ -1,15 +1,66 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "skill_result.schema.json",
-  "title": "SkillResult",
+  "title": "SkillResultV2",
   "type": "object",
-  "required": ["skill", "status", "summary", "evidence_ids"],
+  "required": ["ok", "outputs", "tool_calls", "cost_units", "artefact_delta", "failure_codes"],
   "properties": {
-    "skill": { "type": "string" },
-    "status": { "type": "string", "enum": ["ok", "failed", "partial"] },
-    "summary": { "type": "string" },
-    "evidence_ids": { "type": "array", "items": { "type": "string" } },
-    "outputs": { "type": "object", "additionalProperties": true }
+    "ok": { "type": "boolean" },
+    "outputs": { "type": "object", "additionalProperties": true },
+    "tool_calls": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "required": ["tool_name", "params_hash", "duration_ms"],
+        "properties": {
+          "tool_name": { "type": "string" },
+          "params_hash": { "type": "string" },
+          "duration_ms": { "type": "number", "minimum": 0 },
+          "status": { "type": "string" },
+          "error_type": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cost_units": {
+      "type": "object",
+      "required": ["time_ms"],
+      "properties": {
+        "time_ms": { "type": "number", "minimum": 0 },
+        "tokens": { "type": "integer", "minimum": 0 },
+        "cost_estimate": { "type": "number", "minimum": 0 },
+        "money_estimate": { "type": "number", "minimum": 0 },
+        "risk_class": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "artefact_delta": {
+      "type": "object",
+      "properties": {
+        "files_changed": { "type": "array", "items": { "type": "string" } },
+        "files_created": { "type": "array", "items": { "type": "string" } },
+        "tests_run": { "type": "array", "items": { "type": "string" } },
+        "urls_fetched": { "type": "array", "items": { "type": "string" } },
+        "screenshots": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "progress_proxy": { "type": ["object", "number", "string", "null"] },
+    "failure_codes": { "type": "array", "items": { "type": "string" } },
+    "suggested_next": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "skill_id": { "type": "string" },
+          "tool": { "type": "string" },
+          "rationale": { "type": "string" },
+          "preconditions": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
   },
   "additionalProperties": false
 }

@@ -5,11 +5,33 @@ on:
   pull_request:
 
 jobs:
-  validate:
+  contracts-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-      - name: Validate repo
-        run: ./scripts/validate_repo.sh
+      - name: Contracts lint
+        run: python3 ./scripts/validate_contracts.py --lint-only
+
+  contracts-validate-strict:
+    runs-on: ubuntu-latest
+    needs: contracts-lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Strict contracts validation
+        run: python3 ./scripts/validate_contracts.py --strict
+
+  policy-gates:
+    runs-on: ubuntu-latest
+    needs: contracts-validate-strict
+    steps:
+      - uses: actions/checkout@v4
+      - name: Policy gates
+        run: python3 ./scripts/validate_contracts.py --policy-only
+
+  docs-consistency:
+    runs-on: ubuntu-latest
+    needs: contracts-validate-strict
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docs consistency
+        run: python3 ./scripts/validate_contracts.py --docs-only

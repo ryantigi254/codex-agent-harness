@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "output_boundaries.schema.json",
+  "title": "OutputBoundariesPolicyV1",
+  "type": "object",
+  "required": ["policy_id", "max_payload_bytes", "max_array_items", "max_text_field_bytes", "max_tool_calls"],
+  "properties": {
+    "policy_id": { "type": "string" },
+    "max_payload_bytes": { "type": "integer", "minimum": 1 },
+    "max_array_items": { "type": "integer", "minimum": 1 },
+    "max_text_field_bytes": { "type": "integer", "minimum": 1 },
+    "max_tool_calls": { "type": "integer", "minimum": 1 }
+  },
+  "additionalProperties": false
+}

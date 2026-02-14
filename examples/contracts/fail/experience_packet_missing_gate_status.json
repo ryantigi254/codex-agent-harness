@@ -1,0 +1,24 @@
+{
+  "contract": "experience_packet",
+  "expected_errors": [
+    "schema:experience_packet:missing:gate_status"
+  ],
+  "payload": {
+    "run_id": "run-001",
+    "task_signature": "contract-smoke",
+    "skill_stack_used": [
+      "skill-picker-orchestrator"
+    ],
+    "outcome": "failure",
+    "evidence_refs": [
+      "/tmp/evidence.json"
+    ],
+    "reason_codes": [
+      "validation_failed/tests_not_run"
+    ],
+    "cost_proxy": {
+      "tokens": 10,
+      "latency_ms": 50
+    }
+  }
+}

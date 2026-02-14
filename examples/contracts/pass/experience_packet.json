@@ -1,0 +1,26 @@
+{
+  "contract": "experience_packet",
+  "payload": {
+    "run_id": "run-001",
+    "task_signature": "contract-smoke",
+    "skill_stack_used": [
+      "skill-picker-orchestrator",
+      "validation-gate-runner"
+    ],
+    "outcome": "success",
+    "gate_status": {
+      "passed": true,
+      "validator_result_ref": "/tmp/validator_result.json"
+    },
+    "evidence_refs": [
+      "/tmp/evidence.json"
+    ],
+    "reason_codes": [],
+    "cost_proxy": {
+      "tokens": 20,
+      "latency_ms": 120
+    },
+    "trajectory_ref": "/tmp/trajectory.jsonl",
+    "summary_ref": "/tmp/summary.json"
+  }
+}

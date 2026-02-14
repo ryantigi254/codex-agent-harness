@@ -1,0 +1,15 @@
+{
+  "contract": "skill_result",
+  "expected_errors": [
+    "schema:skill_result:missing:tool_calls"
+  ],
+  "payload": {
+    "ok": true,
+    "outputs": {},
+    "cost_units": {
+      "time_ms": 1.2
+    },
+    "artefact_delta": {},
+    "failure_codes": []
+  }
+}

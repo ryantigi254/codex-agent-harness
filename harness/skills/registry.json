@@ -1,5 +1,18 @@
 {
-  "skills_version": "1.0",
+  "skills_version": "2.0",
+  "contracts_version": "2.0",
+  "boundaries_policy_id": "output-boundaries-v1",
+  "merge_authority_policy_id": "merge-authority-v1",
+  "reward_policy_id": "reward-policy-v1",
+  "contract_catalog": {
+    "skill_result": "harness/skills/schemas/skill_result.schema.json",
+    "evidence_object": "harness/skills/schemas/evidence_object.schema.json",
+    "validator_result": "harness/skills/schemas/validator_result.schema.json",
+    "experience_packet": "harness/skills/schemas/experience_packet.schema.json",
+    "output_boundaries": "harness/skills/schemas/output_boundaries.schema.json",
+    "merge_authority_policy": "harness/skills/schemas/merge_authority_policy.schema.json",
+    "reward_policy": "harness/skills/schemas/reward_policy.schema.json"
+  },
   "skills": [
     {
       "name": "skill-picker-orchestrator",
@@ -7,7 +20,43 @@
       "inputs_schema": "harness/skills/schemas/skill_request.schema.json",
       "outputs_schema": "harness/skills/schemas/skill_result.schema.json",
       "depends_on": ["validation-gate-runner"],
-      "triggers": ["default_entrypoint"]
+      "triggers": ["default_entrypoint"],
+      "contract_ids": {
+        "skill_result": "skill_result",
+        "evidence_object": "evidence_object",
+        "validator_result": "validator_result",
+        "experience_packet": "experience_packet"
+      }
     }
-  ]
+  ],
+  "policies": {
+    "output_boundaries": {
+      "policy_id": "output-boundaries-v1",
+      "max_payload_bytes": 262144,
+      "max_array_items": 200,
+      "max_text_field_bytes": 65536,
+      "max_tool_calls": 200
+    },
+    "merge_authority": {
+      "policy_id": "merge-authority-v1",
+      "subagent_proposal_only": true,
+      "governor_review_required": true,
+      "validator_gate_required": true,
+      "governor_decision_field": "governor_approved"
+    },
+    "reward_policy": {
+      "policy_id": "reward-policy-v1",
+      "disallow_activity_volume_reward": true,
+      "positive_progress_requires_validator_improved": true,
+      "required_components": [
+        "terminal",
+        "progress_delta",
+        "cost_penalty",
+        "invalid_penalty",
+        "no_progress_penalty",
+        "spam_penalty",
+        "reward_total"
+      ]
+    }
+  }
 }

@@ -1,0 +1,14 @@
+{
+  "contract": "validator_result",
+  "expected_errors": [
+    "schema:validator_result:missing:evidence_refs"
+  ],
+  "payload": {
+    "validator_id": "validation-gate-runner",
+    "passed": false,
+    "reason_codes": [
+      "validation_failed/tests_not_run"
+    ],
+    "gate_scores": {}
+  }
+}

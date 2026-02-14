@@ -1,0 +1,14 @@
+{
+  "contract": "evidence_object",
+  "payload": {
+    "id": "ev-001",
+    "source": "pdf",
+    "location": {
+      "path": "/tmp/report.pdf",
+      "page": 2
+    },
+    "span": "Grounding evidence span",
+    "confidence": 0.81,
+    "provenance_tag": "real"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "reward_policy.schema.json",
+  "title": "RewardPolicyV1",
+  "type": "object",
+  "required": [
+    "policy_id",
+    "disallow_activity_volume_reward",
+    "positive_progress_requires_validator_improved",
+    "required_components"
+  ],
+  "properties": {
+    "policy_id": { "type": "string" },
+    "disallow_activity_volume_reward": { "type": "boolean" },
+    "positive_progress_requires_validator_improved": { "type": "boolean" },
+    "required_components": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

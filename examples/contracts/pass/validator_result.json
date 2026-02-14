@@ -1,0 +1,18 @@
+{
+  "contract": "validator_result",
+  "payload": {
+    "validator_id": "validation-gate-runner",
+    "passed": true,
+    "reason_codes": [],
+    "evidence_refs": [
+      "/tmp/iteration_log.jsonl"
+    ],
+    "gate_scores": {
+      "checks_present": {
+        "passed": true,
+        "weight": 0.5
+      }
+    },
+    "progress_delta": 0.3
+  }
+}

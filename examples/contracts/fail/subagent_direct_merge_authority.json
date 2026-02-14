@@ -1,0 +1,12 @@
+{
+  "contract": "merge_authority_policy",
+  "expected_errors": [
+    "policy:merge_authority:subagent_direct_merge_forbidden"
+  ],
+  "payload": {
+    "candidate_id": "cand-001",
+    "is_subagent_output": true,
+    "merge_to_main": true,
+    "governor_review_required": false
+  }
+}

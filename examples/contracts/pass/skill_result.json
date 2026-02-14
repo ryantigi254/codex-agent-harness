@@ -1,0 +1,38 @@
+{
+  "contract": "skill_result",
+  "payload": {
+    "ok": true,
+    "outputs": {
+      "route": {
+        "chosen_skills": [
+          "validation-gate-runner"
+        ]
+      }
+    },
+    "tool_calls": [
+      {
+        "tool_name": "route_task",
+        "params_hash": "abc123",
+        "duration_ms": 1.2
+      }
+    ],
+    "cost_units": {
+      "time_ms": 1.2,
+      "tokens": 4,
+      "cost_estimate": 0.0,
+      "risk_class": "low"
+    },
+    "artefact_delta": {
+      "files_changed": [],
+      "files_created": [],
+      "tests_run": [],
+      "urls_fetched": [],
+      "screenshots": []
+    },
+    "progress_proxy": {
+      "progress_delta": 0.2
+    },
+    "failure_codes": [],
+    "suggested_next": []
+  }
+}

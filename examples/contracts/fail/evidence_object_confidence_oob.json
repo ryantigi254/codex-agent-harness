@@ -1,0 +1,15 @@
+{
+  "contract": "evidence_object",
+  "expected_errors": [
+    "schema:evidence_object:confidence_out_of_range"
+  ],
+  "payload": {
+    "source": "pdf",
+    "location": {
+      "path": "/tmp/report.pdf",
+      "page": 1
+    },
+    "span": "x",
+    "confidence": 1.4
+  }
+}

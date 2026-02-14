@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "merge_authority_policy.schema.json",
+  "title": "MergeAuthorityPolicyV1",
+  "type": "object",
+  "required": ["policy_id", "subagent_proposal_only", "governor_review_required", "validator_gate_required", "governor_decision_field"],
+  "properties": {
+    "policy_id": { "type": "string" },
+    "subagent_proposal_only": { "type": "boolean" },
+    "governor_review_required": { "type": "boolean" },
+    "validator_gate_required": { "type": "boolean" },
+    "governor_decision_field": { "type": "string" }
+  },
+  "additionalProperties": false
+}
