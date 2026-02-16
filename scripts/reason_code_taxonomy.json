@@ -423,6 +423,102 @@
         "emit_relocation_pointers"
       ],
       "class": "validation_failed"
+    },
+    "schema_violation/memory_design_missing_interface": {
+      "missing_actions": [
+        "emit_memory_design_interface_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "policy_violation/memory_design_forbidden_io": {
+      "missing_actions": [
+        "remove_forbidden_memory_design_io"
+      ],
+      "class": "policy_violation"
+    },
+    "validation_failed/edit_pass_non_improving": {
+      "missing_actions": [
+        "stop_non_improving_edit_pass"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/edit_loop_exceeded_budget": {
+      "missing_actions": [
+        "enforce_edit_pass_budget"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/edit_oscillation_detected": {
+      "missing_actions": [
+        "break_edit_oscillation_loop"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/resume_packet_missing_fields": {
+      "missing_actions": [
+        "emit_required_resume_packet_fields"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/iteration_budget_exceeded": {
+      "missing_actions": [
+        "reduce_iteration_depth_or_budget"
+      ],
+      "class": "validation_failed"
+    },
+    "schema_violation/review_packet_missing": {
+      "missing_actions": [
+        "emit_structured_review_packet"
+      ],
+      "class": "schema_violation"
+    },
+    "policy_violation/role_tool_violation": {
+      "missing_actions": [
+        "enforce_role_tool_allowlist"
+      ],
+      "class": "policy_violation"
+    },
+    "schema_violation/routing_packet_missing": {
+      "missing_actions": [
+        "emit_routing_decision_packet"
+      ],
+      "class": "schema_violation"
+    },
+    "validation_failed/harness_task_nondeterministic": {
+      "missing_actions": [
+        "pin_seed_and_replay_task"
+      ],
+      "class": "validation_failed"
+    },
+    "schema_violation/debate_trace_missing_roles": {
+      "missing_actions": [
+        "attach_debate_role_metadata"
+      ],
+      "class": "schema_violation"
+    },
+    "validation_failed/debate_claim_missing_evidence_ref": {
+      "missing_actions": [
+        "attach_claim_level_evidence_refs"
+      ],
+      "class": "validation_failed"
+    },
+    "schema_violation/synthetic_tool_call_invalid": {
+      "missing_actions": [
+        "normalise_synthetic_tool_call_schema"
+      ],
+      "class": "schema_violation"
+    },
+    "policy_violation/task_promoted_without_stability_proof": {
+      "missing_actions": [
+        "run_stability_replay_before_promotion"
+      ],
+      "class": "policy_violation"
+    },
+    "validation_failed/json_render_input_invalid": {
+      "missing_actions": [
+        "repair_json_render_input_schema"
+      ],
+      "class": "validation_failed"
     }
   }
 }

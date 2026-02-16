@@ -66,6 +66,13 @@ MERGE_MEMORY_WORKTREE_CANDIDATES = CODEX_ROOT / "subagent-dag-orchestrator/scrip
 EMIT_EXPERIENCE_PACKET = CODEX_ROOT / "project-run-reporter/scripts/emit_experience_packet.py"
 DISTILLER_SCRIPT = CODEX_ROOT / "experience-to-skill-distiller/scripts/run_experience_to_skill_distiller.py"
 DISTILLER_PROPOSAL_SCHEMA = CODEX_ROOT / "experience-to-skill-distiller/references/proposal_bundle_schema.json"
+EMIT_EDIT_TRACE = CODEX_ROOT / "self-correction-loop/scripts/emit_edit_trace.py"
+EMIT_ROUTING_DECISION_PACKET = CODEX_ROOT / "uncertainty-calibrated-answering/scripts/emit_routing_decision_packet.py"
+EMIT_MEMORY_DESIGN_CANDIDATE = CODEX_ROOT / "experience-to-skill-distiller/scripts/emit_memory_design_candidate.py"
+EMIT_DEBATE_TRACE = CODEX_ROOT / "project-run-reporter/scripts/emit_debate_trace.py"
+JSON_RENDER_SMOKE = CODEX_ROOT / "codex-agent-harness/scripts/json_render_smoke.py"
+HARNESS_PASS_ROUTING_FIXTURE = CODEX_ROOT / "codex-agent-harness/examples/contracts/pass/routing_decision_packet.json"
+HARNESS_FAIL_ROUTING_FIXTURE = CODEX_ROOT / "codex-agent-harness/examples/contracts/fail/routing_decision_packet_chosen_model_missing_from_candidates.json"
 RUN_UNTIL_GREEN = CODEX_ROOT / "validation-gate-runner/scripts/run_until_green.py"
 CTX_ADAPTER = CODEX_ROOT / "rlm-repl-runtime/scripts/context_adapter.py"
 CTX_NAV = CODEX_ROOT / "rlm-repl-runtime/scripts/build_navigation_plan.py"
@@ -2444,6 +2451,175 @@ def run_experience_packet_checks(tmp_dir: Path) -> dict[str, Any]:
         errors.append("emit_experience_packet_failed")
     return {"name": "experience_packet_checks", "ok": step["ok"] and not errors, "details": [step], "errors": errors}
 
+
+def run_runtime_emitter_contract_checks(tmp_dir: Path) -> dict[str, Any]:
+    errors: list[str] = []
+    details: list[dict[str, Any]] = []
+
+    edit_in = tmp_dir / "edit_trace_in.json"
+    edit_out = tmp_dir / "edit_trace_out.json"
+    write_temp_json(
+        edit_in,
+        {
+            "pass_index": 1,
+            "max_passes": 4,
+            "before": "draft-1",
+            "after": "draft-2",
+            "score_before": 0.41,
+            "score_after": 0.62,
+            "stop_reason": "converged",
+        },
+    )
+    edit_step = run_cmd([sys.executable, str(EMIT_EDIT_TRACE), "--input", str(edit_in), "--output", str(edit_out)])
+    details.append(edit_step)
+    if not edit_step["ok"]:
+        errors.append("emit_edit_trace_failed")
+    elif edit_out.exists():
+        edit_payload = read_json(edit_out)
+        trace = edit_payload.get("edit_trace", {})
+        for key in ("pass_index", "before_hash", "after_hash", "validator_delta", "stop_reason"):
+            if key not in trace:
+                errors.append(f"missing_edit_trace_field.{key}")
+    else:
+        errors.append("emit_edit_trace_output_missing")
+
+    route_in = tmp_dir / "routing_packet_in.json"
+    route_out = tmp_dir / "routing_packet_out.json"
+    write_temp_json(
+        route_in,
+        {
+            "step_id": "step-5",
+            "candidate_models": ["small-local", "large-remote"],
+            "chosen_model": "large-remote",
+            "confidence": 0.79,
+            "budget_state": {"remaining_tokens": 4000, "remaining_time_ms": 50000},
+            "justification_code": "validator_risk_high",
+        },
+    )
+    route_step = run_cmd(
+        [sys.executable, str(EMIT_ROUTING_DECISION_PACKET), "--input", str(route_in), "--output", str(route_out)]
+    )
+    details.append(route_step)
+    if not route_step["ok"]:
+        errors.append("emit_routing_decision_packet_failed")
+    elif route_out.exists():
+        route_payload = read_json(route_out)
+        packet = route_payload.get("routing_decision_packet", {})
+        for key in ("step_id", "candidate_models", "chosen_model", "confidence", "budget_state", "justification_code"):
+            if key not in packet:
+                errors.append(f"missing_routing_decision_packet_field.{key}")
+    else:
+        errors.append("emit_routing_decision_packet_output_missing")
+
+    memory_in = tmp_dir / "memory_candidate_in.json"
+    memory_out = tmp_dir / "memory_candidate_out.json"
+    write_temp_json(
+        memory_in,
+        {
+            "source_run_id": "run-501",
+            "eval_task_ids": ["A01", "A03"],
+            "artefact_refs": ["/tmp/eval/a03.json"],
+            "interface_compliant": True,
+            "forbidden_io_detected": False,
+            "score": 0.73,
+        },
+    )
+    memory_step = run_cmd(
+        [sys.executable, str(EMIT_MEMORY_DESIGN_CANDIDATE), "--input", str(memory_in), "--output", str(memory_out)]
+    )
+    details.append(memory_step)
+    if not memory_step["ok"]:
+        errors.append("emit_memory_design_candidate_failed")
+    elif memory_out.exists():
+        memory_payload = read_json(memory_out)
+        packet = memory_payload.get("memory_design_candidate", {})
+        for key in ("source_run_id", "eval_task_ids", "artefact_refs", "interface_compliant"):
+            if key not in packet:
+                errors.append(f"missing_memory_design_candidate_field.{key}")
+    else:
+        errors.append("emit_memory_design_candidate_output_missing")
+
+    debate_in = tmp_dir / "debate_trace_in.json"
+    debate_out = tmp_dir / "debate_trace_out.json"
+    write_temp_json(
+        debate_in,
+        {
+            "speaker_role": "reviewer",
+            "claim_id": "claim-11",
+            "counterclaim_id": "counter-11a",
+            "evidence_refs": ["/tmp/evidence/claim-11.json"],
+        },
+    )
+    debate_step = run_cmd([sys.executable, str(EMIT_DEBATE_TRACE), "--input", str(debate_in), "--output", str(debate_out)])
+    details.append(debate_step)
+    if not debate_step["ok"]:
+        errors.append("emit_debate_trace_failed")
+    elif debate_out.exists():
+        debate_payload = read_json(debate_out)
+        trace = debate_payload.get("debate_trace", {})
+        for key in ("speaker_role", "timestamp", "claim_id", "counterclaim_id", "evidence_refs"):
+            if key not in trace:
+                errors.append(f"missing_debate_trace_field.{key}")
+    else:
+        errors.append("emit_debate_trace_output_missing")
+
+    return {"name": "runtime_emitter_contract_checks", "ok": not errors, "details": details, "errors": errors}
+
+
+def run_json_render_smoke_checks(tmp_dir: Path) -> dict[str, Any]:
+    rendered_out = tmp_dir / "json_render_smoke.html"
+    pass_step = run_cmd(
+        [
+            sys.executable,
+            str(JSON_RENDER_SMOKE),
+            "--pass-fixture",
+            str(HARNESS_PASS_ROUTING_FIXTURE),
+            "--fail-fixture",
+            str(HARNESS_FAIL_ROUTING_FIXTURE),
+            "--rendered-output",
+            str(rendered_out),
+        ]
+    )
+
+    # Expected failure lane to assert fail-closed reason code.
+    fail_rendered = tmp_dir / "json_render_smoke_bad.html"
+    fail_step = run_cmd(
+        [
+            sys.executable,
+            str(JSON_RENDER_SMOKE),
+            "--pass-fixture",
+            str(HARNESS_FAIL_ROUTING_FIXTURE),
+            "--fail-fixture",
+            str(HARNESS_FAIL_ROUTING_FIXTURE),
+            "--rendered-output",
+            str(fail_rendered),
+        ]
+    )
+
+    errors: list[str] = []
+    if not pass_step["ok"]:
+        errors.append("json_render_smoke_pass_lane_failed")
+    if not rendered_out.exists():
+        errors.append("json_render_smoke_rendered_output_missing")
+
+    try:
+        fail_payload = json.loads(fail_step.get("stdout", "") or "{}")
+    except json.JSONDecodeError:
+        fail_payload = {}
+    fail_reason_codes = fail_payload.get("reason_codes", []) if isinstance(fail_payload.get("reason_codes", []), list) else []
+    if fail_step["exit_code"] == 0:
+        errors.append("json_render_smoke_fail_lane_unexpected_success")
+    if "validation_failed/json_render_input_invalid" not in fail_reason_codes:
+        errors.append("json_render_smoke_missing_fail_closed_reason")
+
+    return {
+        "name": "json_render_smoke_checks",
+        "ok": not errors,
+        "details": [pass_step, {**fail_step, "expected_failure": True}],
+        "errors": errors,
+    }
+
+
 def run_docs_generation_check() -> dict[str, Any]:
     generate = run_cmd(
         [
@@ -2652,6 +2828,8 @@ def main() -> int:
             run_memory_defrag_safety_checks(tmp_dir),
             run_retrieval_budget_compliance_checks(tmp_dir),
             run_experience_packet_checks(tmp_dir),
+            run_runtime_emitter_contract_checks(tmp_dir),
+            run_json_render_smoke_checks(tmp_dir),
             run_simulated_lane_contract_checks(tmp_dir),
             run_snapshot_index_checks(tmp_dir),
             run_progress_proxy_credit_checks(tmp_dir),

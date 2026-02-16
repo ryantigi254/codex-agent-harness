@@ -29,6 +29,11 @@ REQUIRED_SKILL_DOC_SECTIONS = [
 ALLOWED_MANUAL_DOCS = {
     Path("contracts/context_repo.md"),
 }
+AGENTS_MERMAID_SOURCES = [
+    Path("/Users/ryangichuru/.codex/skills/AGENTS.md"),
+    Path("/Users/ryangichuru/.codex/AGENTS.md"),
+]
+ARCHITECTURE_MMD_PATH = Path("/Users/ryangichuru/.codex/skills/Codex Architecture Dependancy.mmd")
 
 
 def friendly_doc_name(skill_id: str) -> str:
@@ -185,6 +190,45 @@ def run_generation_drift_check(skills_root: Path, docs_root: Path) -> list[str]:
         return compare_directories(tmp_root, docs_root)
 
 
+def normalize_mermaid_text(text: str) -> str:
+    lines = [line.rstrip() for line in text.strip().splitlines()]
+    return "\n".join(lines).strip() + "\n"
+
+
+def extract_mermaid_block(markdown: str) -> str | None:
+    match = re.search(r"```mermaid\s*\n(.*?)\n```", markdown, flags=re.DOTALL)
+    if not match:
+        return None
+    return match.group(1)
+
+
+def check_architecture_mermaid_sync() -> tuple[list[str], list[str]]:
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    source_path = next((path for path in AGENTS_MERMAID_SOURCES if path.exists()), None)
+    if source_path is None:
+        warnings.append("architecture_mermaid_source_missing")
+        return errors, warnings
+    if not ARCHITECTURE_MMD_PATH.exists():
+        errors.append(f"architecture_mmd_missing:{ARCHITECTURE_MMD_PATH}")
+        return errors, warnings
+
+    agents_text = load_text(source_path)
+    source_mermaid = extract_mermaid_block(agents_text)
+    if source_mermaid is None:
+        warnings.append(f"architecture_mermaid_block_missing:{source_path}")
+        return errors, warnings
+
+    current_mmd = load_text(ARCHITECTURE_MMD_PATH)
+    if normalize_mermaid_text(source_mermaid) != normalize_mermaid_text(current_mmd):
+        errors.append(
+            "architecture_mermaid_out_of_sync:"
+            f"source={source_path};target={ARCHITECTURE_MMD_PATH}"
+        )
+    return errors, warnings
+
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -214,6 +258,7 @@ def main() -> int:
 
     index_errors = check_index_consistency(args.skills_root, args.docs_root)
     drift_errors = run_generation_drift_check(args.skills_root, args.docs_root)
+    architecture_errors, architecture_warnings = check_architecture_mermaid_sync()
 
     errors: list[str] = []
     for doc_path, items in section_errors.items():
@@ -221,9 +266,11 @@ def main() -> int:
     for doc_path, items in pointer_errors.items():
         errors.extend([f"{doc_path}:{item}" for item in items])
     errors.extend(index_errors)
+    errors.extend(architecture_errors)
 
     warnings: list[str] = []
     warnings.extend(drift_errors)
+    warnings.extend(architecture_warnings)
 
     if args.strict:
         errors.extend(drift_errors)
@@ -239,6 +286,8 @@ def main() -> int:
         "pointer_error_count": sum(len(v) for v in pointer_errors.values()),
         "index_error_count": len(index_errors),
         "drift_error_count": len(drift_errors),
+        "architecture_error_count": len(architecture_errors),
+        "architecture_warning_count": len(architecture_warnings),
     }
     payload["skill_result"] = {
         "ok": payload["ok"],
