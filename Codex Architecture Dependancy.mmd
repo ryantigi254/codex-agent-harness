@@ -98,6 +98,7 @@ subgraph CI["CI Hard Gates (v2 + sufficiency + invocation + letta-runtime)"]
   CGN["checkpoint-go-no-go-script"]:::module
   CID["docs-consistency"]:::module
   SIC["skill-invocation-smoke-checks"]:::module
+  CSE["secret-scan"]:::module
 end
 
 U -->|request| MAIN
@@ -203,13 +204,14 @@ VG -->|acceptance truth| TS
 SGOV -->|merge audit refs| TS
 CP -->|checkpoint output| SCR
 
-CIL --> CIV --> CIP --> CRG --> CCK --> CRK --> CGN --> CID --> SIC
+CIL --> CIV --> CIP --> CRG --> CCK --> CRK --> CGN --> CID --> SIC --> CSE
 CIV -->|enforces v2 contracts| VG
 CIP -->|enforces merge and reward policy| VG
 CRG -->|reason-code stability| PRR
 CGN -->|deterministic checkpoint computation| GATE
 CID -->|blocks docs drift| PRR
 SIC -->|verifies explicit and description-based skill routing| SP
+CSE -->|fails hard-coded secrets| VG
 
 classDef actor fill:#fff3cd,stroke:#b38600,stroke-width:1px,color:#111;
 classDef orch fill:#d1ecf1,stroke:#0c5460,stroke-width:1px,color:#111;

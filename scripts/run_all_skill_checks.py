@@ -79,6 +79,7 @@ CTX_NAV = CODEX_ROOT / "rlm-repl-runtime/scripts/build_navigation_plan.py"
 GENERATE_SKILL_DOCS = CODEX_ROOT / "scripts/generate_skill_docs.py"
 VALIDATE_SKILL_DOCS = CODEX_ROOT / "scripts/validate_skill_docs.py"
 LETTA_ADAPTER = CODEX_ROOT / "scripts/letta_adapter.py"
+SECRET_SCAN = CODEX_ROOT / "scripts/scan_secrets.py"
 STAGE_LETTA_DRAFT = CODEX_ROOT / "scratchpad-governor/scripts/stage_letta_draft.py"
 PUBLISH_LETTA_DRAFTS = CODEX_ROOT / "scratchpad-governor/scripts/publish_letta_drafts.py"
 DOCS_ROOT = CODEX_ROOT / "docs"
@@ -2719,6 +2720,24 @@ def run_relation_graph_checks() -> dict[str, Any]:
     }
 
 
+def run_secret_scan_checks() -> dict[str, Any]:
+    scan = run_cmd([sys.executable, str(SECRET_SCAN), "--root", str(CODEX_ROOT), "--mode", "tracked"])
+    payload: dict[str, Any] = {}
+    if scan.get("stdout"):
+        try:
+            payload = json.loads(scan["stdout"])
+        except json.JSONDecodeError:
+            payload = {}
+    return {
+        "name": "secret_scan_checks",
+        "ok": scan["ok"] and bool(payload.get("ok", False)),
+        "details": [scan],
+        "finding_count": int(payload.get("finding_count", 0) or 0),
+        "reason_codes": payload.get("reason_codes", []),
+        "findings": payload.get("findings", []),
+    }
+
+
 def run_skill_script_contract_audit(strict_skill_result: bool = False) -> dict[str, Any]:
     python_scripts = sorted(CODEX_ROOT.glob("**/scripts/*.py"))
     missing_skill_result: list[str] = []
@@ -2848,6 +2867,7 @@ def main() -> int:
             run_docs_generation_check(),
             run_docs_drift_check(strict_skill_result=args.strict_skill_result),
             run_relation_graph_checks(),
+            run_secret_scan_checks(),
             run_skill_script_contract_audit(strict_skill_result=args.strict_skill_result),
             run_skillbank_flow(tmp_dir),
             run_memory_contract_smoke(tmp_dir),
