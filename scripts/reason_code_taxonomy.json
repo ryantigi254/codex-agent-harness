@@ -1,0 +1,428 @@
+{
+  "version": "2.1.0",
+  "namespaces": [
+    "evidence_missing/*",
+    "validation_failed/*",
+    "execution_error/*",
+    "schema_violation/*",
+    "policy_violation/*",
+    "integration_degraded/*",
+    "no_progress/*",
+    "safety_block/*"
+  ],
+  "legacy_aliases": {
+    "missing_sources": "evidence_missing/missing_sources",
+    "tests_not_run": "validation_failed/tests_not_run",
+    "grounding_failed": "validation_failed/grounding_failed",
+    "no_progress_loop": "no_progress/no_progress_loop",
+    "tool_error": "execution_error/tool_error",
+    "validation_checks_failed": "validation_failed/checks_failed",
+    "max_iterations_reached": "validation_failed/max_iterations_reached",
+    "schema_violation": "schema_violation/malformed_payload"
+  },
+  "codes": {
+    "evidence_missing/missing_sources": {
+      "missing_actions": [
+        "use_source_grounding"
+      ],
+      "class": "evidence_missing"
+    },
+    "evidence_missing/missing_citations": {
+      "missing_actions": [
+        "collect_citation_spans"
+      ],
+      "class": "evidence_missing"
+    },
+    "evidence_missing/checklist_evidence_missing": {
+      "missing_actions": [
+        "attach_checklist_evidence_refs"
+      ],
+      "class": "evidence_missing"
+    },
+    "evidence_missing/snapshot_coverage_missing": {
+      "missing_actions": [
+        "capture_additional_snapshots"
+      ],
+      "class": "evidence_missing"
+    },
+    "validation_failed/tests_not_run": {
+      "missing_actions": [
+        "run_validation_tests"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/checks_failed": {
+      "missing_actions": [
+        "inspect_iteration_log"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/max_iterations_reached": {
+      "missing_actions": [
+        "tighten_plan_scope"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/grounding_failed": {
+      "missing_actions": [
+        "fetch_evidence"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/no_validator_improvement": {
+      "missing_actions": [
+        "run_diagnostic_validator_pass"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/diagnostic_no_improvement": {
+      "missing_actions": [
+        "switch_strategy"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/fail_closed_abort": {
+      "missing_actions": [
+        "emit_failure_packet"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/checklist_strict_failed": {
+      "missing_actions": [
+        "satisfy_strict_checklist_items"
+      ],
+      "class": "validation_failed"
+    },
+    "execution_error/tool_error": {
+      "missing_actions": [
+        "fix_tool_params"
+      ],
+      "class": "execution_error"
+    },
+    "execution_error/invalid_action": {
+      "missing_actions": [
+        "switch_skill"
+      ],
+      "class": "execution_error"
+    },
+    "execution_error/simulated_lane": {
+      "missing_actions": [
+        "run_real_lane_for_integration"
+      ],
+      "class": "execution_error"
+    },
+    "schema_violation/malformed_payload": {
+      "missing_actions": [
+        "repair_schema_payload"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/validation_contract_missing_checks": {
+      "missing_actions": [
+        "add_acceptance_tests"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/missing_skill_evolution_queue": {
+      "missing_actions": [
+        "emit_skill_evolution_queue"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/missing_task_signature": {
+      "missing_actions": [
+        "attach_task_signature"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/missing_reason_codes": {
+      "missing_actions": [
+        "emit_reason_codes"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/missing_missing_actions": {
+      "missing_actions": [
+        "emit_missing_actions"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/missing_evidence_refs": {
+      "missing_actions": [
+        "attach_evidence_refs"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/checklist_contract_missing_required": {
+      "missing_actions": [
+        "repair_checklist_contract"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/checklist_dependency_cycle": {
+      "missing_actions": [
+        "remove_checklist_dependency_cycle"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/checklist_invalid_strictness": {
+      "missing_actions": [
+        "normalise_checklist_strictness"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/invalid_trust_level": {
+      "missing_actions": [
+        "set_valid_trust_level"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/invalid_requested_profile": {
+      "missing_actions": [
+        "set_valid_requested_profile"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/invalid_simulation_policy": {
+      "missing_actions": [
+        "set_valid_simulation_policy"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/evidence_object_missing_required": {
+      "missing_actions": [
+        "attach_typed_evidence_object_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/evidence_object_invalid_type": {
+      "missing_actions": [
+        "normalise_evidence_object_types"
+      ],
+      "class": "schema_violation"
+    },
+    "validation_failed/evidence_confidence_out_of_range": {
+      "missing_actions": [
+        "clamp_evidence_confidence"
+      ],
+      "class": "validation_failed"
+    },
+    "schema_violation/output_payload_too_large": {
+      "missing_actions": [
+        "reduce_output_payload_size"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/output_array_too_large": {
+      "missing_actions": [
+        "truncate_large_array_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/output_text_field_too_large": {
+      "missing_actions": [
+        "truncate_large_text_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "validation_failed/missing_execution_profile": {
+      "missing_actions": [
+        "emit_execution_profile"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/missing_execution_audit_ref": {
+      "missing_actions": [
+        "emit_execution_audit_ref"
+      ],
+      "class": "validation_failed"
+    },
+    "schema_violation/letta_pointer_missing_required": {
+      "missing_actions": [
+        "attach_complete_letta_pointer_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/letta_pointer_invalid_type": {
+      "missing_actions": [
+        "normalise_letta_pointer_types"
+      ],
+      "class": "schema_violation"
+    },
+    "validation_failed/letta_pointer_hash_missing": {
+      "missing_actions": [
+        "attach_letta_content_hash"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/letta_pointer_stale_sync": {
+      "missing_actions": [
+        "refresh_letta_pointer_sync"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/letta_agent_missing": {
+      "missing_actions": [
+        "set_letta_agent_id"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/letta_sync_missing": {
+      "missing_actions": [
+        "run_letta_preflight_sync"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/letta_publish_without_gate": {
+      "missing_actions": [
+        "require_validator_gate_before_publish"
+      ],
+      "class": "validation_failed"
+    },
+    "integration_degraded/letta_sync_failed": {
+      "missing_actions": [
+        "fallback_to_local_memory_and_retry_sync"
+      ],
+      "class": "validation_failed"
+    },
+    "integration_degraded/letta_stale": {
+      "missing_actions": [
+        "refresh_or_revalidate_letta_cache"
+      ],
+      "class": "validation_failed"
+    },
+    "policy_violation/letta_publish_without_governor": {
+      "missing_actions": [
+        "route_publish_through_governor_approval"
+      ],
+      "class": "safety_block"
+    },
+    "policy_violation/letta_direct_memory_write_forbidden": {
+      "missing_actions": [
+        "route_external_write_through_governor"
+      ],
+      "class": "safety_block"
+    },
+    "no_progress/no_progress_loop": {
+      "missing_actions": [
+        "switch_strategy",
+        "run_diagnostic_validator_pass"
+      ],
+      "class": "no_progress"
+    },
+    "no_progress/scratchpad_bloat": {
+      "missing_actions": [
+        "trim_scratchpad_updates"
+      ],
+      "class": "no_progress"
+    },
+    "no_progress/progress_proxy_stalled": {
+      "missing_actions": [
+        "trigger_strategy_revision"
+      ],
+      "class": "no_progress"
+    },
+    "no_progress/checklist_flat": {
+      "missing_actions": [
+        "target_unsatisfied_checklist_items"
+      ],
+      "class": "no_progress"
+    },
+    "no_progress/evidence_flat": {
+      "missing_actions": [
+        "expand_evidence_search"
+      ],
+      "class": "no_progress"
+    },
+    "safety_block/unsafe_action_blocked": {
+      "missing_actions": [
+        "run_safety_review"
+      ],
+      "class": "safety_block"
+    },
+    "safety_block/needs_verification": {
+      "missing_actions": [
+        "run_validation_checks"
+      ],
+      "class": "safety_block"
+    },
+    "schema_violation/context_repo_frontmatter_missing": {
+      "missing_actions": [
+        "add_required_frontmatter_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/context_repo_invalid_layout": {
+      "missing_actions": [
+        "repair_context_repo_layout"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/memory_update_bundle_missing_required": {
+      "missing_actions": [
+        "emit_memory_update_bundle_required_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/correction_rollout_missing_required": {
+      "missing_actions": [
+        "emit_correction_rollout_required_fields"
+      ],
+      "class": "schema_violation"
+    },
+    "schema_violation/correction_rollout_mismatched_task_signature": {
+      "missing_actions": [
+        "align_correction_rollout_task_signature"
+      ],
+      "class": "schema_violation"
+    },
+    "validation_failed/self_correction_missing_o2": {
+      "missing_actions": [
+        "emit_second_correction_attempt"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/self_correction_unscored": {
+      "missing_actions": [
+        "attach_validator_scores_for_correction"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/self_correction_regressed": {
+      "missing_actions": [
+        "block_regressing_correction_and_retry"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/memory_provenance_missing": {
+      "missing_actions": [
+        "attach_memory_source_pointers"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/memory_commit_missing": {
+      "missing_actions": [
+        "add_memory_commit_message"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/worktree_required_for_memory_write": {
+      "missing_actions": [
+        "create_isolated_memory_worktree"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/worktree_merge_candidate_blocked": {
+      "missing_actions": [
+        "fix_candidate_and_revalidate"
+      ],
+      "class": "validation_failed"
+    },
+    "validation_failed/defrag_relocation_missing": {
+      "missing_actions": [
+        "emit_relocation_pointers"
+      ],
+      "class": "validation_failed"
+    }
+  }
+}

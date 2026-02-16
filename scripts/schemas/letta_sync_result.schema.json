@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LettaSyncResult",
+  "type": "object",
+  "required": ["enabled", "agent_id", "sync_status", "cache_hit", "items_considered", "reason_codes"],
+  "properties": {
+    "enabled": {"type": "boolean"},
+    "agent_id": {"type": "string"},
+    "sync_status": {"type": "string", "enum": ["ok", "degraded", "skipped"]},
+    "cache_hit": {"type": "boolean"},
+    "items_considered": {"type": "integer", "minimum": 0},
+    "items": {"type": "array", "items": {"type": "object"}},
+    "reason_codes": {"type": "array", "items": {"type": "string"}},
+    "cache_path": {"type": "string"}
+  },
+  "additionalProperties": true
+}
