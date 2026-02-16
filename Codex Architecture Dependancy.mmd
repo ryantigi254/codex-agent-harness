@@ -1,0 +1,224 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+U["User"]:::actor
+LLM["External LLM API"]:::external
+WEB["Web / External Sources"]:::external
+LETTA["Letta Filesystem - read only mirror"]:::external
+REPO["Repo + Local Filesystem"]:::store
+SCR["Project Scratchpads"]:::store
+MREPO["Context Memory Repo - git backed"]:::store
+MREPO_STAGING["Memory staging worktrees"]:::store
+ART["Run Artefacts - traces, logs, reports, screenshots"]:::store
+
+subgraph ORCH["Orchestration"]
+  direction TB
+  MAIN["Main Agent Runtime - Codex / CLI / Service"]:::orch
+  SP["skill-picker-orchestrator"]:::orch
+  TR["task-runbook-executor"]:::orch
+  DAG["subagent-dag-orchestrator"]:::orch
+end
+
+subgraph REASON["Reasoning and Planning"]
+  direction TB
+  ADP["ambiguity-decision-policy"]:::reason
+  PL["logic-chain-task-planner"]:::reason
+  PV["plan-validator-symbolic"]:::reason
+  UCA["uncertainty-calibrated-answering"]:::reason
+  BT["build-things"]:::reason
+  SC["self-correction-loop"]:::reason
+  HF["hypothesis-factory"]:::reason
+end
+
+subgraph IO["Evidence and I/O Helpers"]
+  direction TB
+  PDF["pdf"]:::io
+  DOC["doc"]:::io
+  JNB["jupyter-notebook"]:::io
+  OAI["openai-docs"]:::io
+  CR["cross-repo-pattern-scanner"]:::io
+  PW["playwright"]:::io
+  PWS["playwright-browser-screenshot-workflow"]:::io
+  SS["screenshot"]:::io
+  LTX["latex-overleaf-pdflatex-fixer"]:::io
+end
+
+subgraph SAFETY["Safety, Correctness and Drift Control"]
+  direction TB
+  HSRG["high-stakes-response-gate"]:::safety
+  HGL["hallucination-guard-longform"]:::safety
+  SGE["source-grounding-enforcer"]:::safety
+  LSG["long-run-stability-guard"]:::safety
+  VG["validation-gate-runner"]:::safety
+  CRW["central-reward-harness"]:::module
+  RPH["regression-pattern-hunter"]:::safety
+end
+
+subgraph DEPLOY["Experiment and Deploy"]
+  direction TB
+  EBI["experiment-branch-isolator"]:::deploy
+  DV["deploy-verify-loop"]:::deploy
+  ND["netlify-deploy"]:::deploy
+end
+
+subgraph LEARN["Learning and Consolidation"]
+  direction TB
+  PRR["project-run-reporter"]:::learn
+  SGOV["scratchpad-governor"]:::learn
+  ETS["experience-to-skill-distiller"]:::module
+  SBV["skillbank-store-versioning"]:::module
+  IDLE["idle-time-opportunistic-maintainer"]:::learn
+end
+
+subgraph SANDBOX["Optional Code Sandbox Runtime"]
+  direction TB
+  SB["Sandbox Runner - Local / Docker / WASM-Pyodide"]:::sandbox
+  VFS["Virtual FS - MEMFS"]:::sandbox
+  CTX["Large Context Store - PDF text, repo index, notes"]:::sandbox
+end
+
+subgraph SUFF["Harness Sufficiency Gate"]
+  direction TB
+  TP["20-task fixed pack"]:::module
+  TS["harness_task_scorecard"]:::module
+  CP["harness_sufficiency_checkpoint"]:::module
+  GATE["go/no-go decision"]:::module
+end
+
+subgraph CI["CI Hard Gates (v2 + sufficiency + invocation + letta-runtime)"]
+  direction TB
+  CIL["contracts-lint"]:::module
+  CIV["contracts-validate-strict"]:::module
+  CIP["policy-gates"]:::module
+  CRG["regression-pack"]:::module
+  CCK["checkpoint-contracts"]:::module
+  CRK["checkpoint-regression-pack"]:::module
+  CGN["checkpoint-go-no-go-script"]:::module
+  CID["docs-consistency"]:::module
+  SIC["skill-invocation-smoke-checks"]:::module
+end
+
+U -->|request| MAIN
+MAIN --> SP
+SCR -->|priors and pitfalls| SP
+SP --> ADP
+ADP -->|ask vs assume| SP
+SP -->|plan or multi-step| PL
+SP -->|feature ideation| UCA
+SP -->|research and evidence| PDF
+SP -->|web lookup| PW
+SP -->|notebook artefacts| JNB
+SP -->|repo scan| CR
+SP -->|repeatable runbook| TR
+SP -->|parallel fanout| DAG
+SP -->|deploy or ship| EBI
+SP -->|long-form factual| HGL
+SP -->|high-stakes| HSRG
+SP -->|SkillResult stream| CRW
+
+PL --> PV --> BT --> SC
+SC -->|if mismatch| PL
+SC --> HF --> PL
+
+PDF -->|extract| CTX
+DOC -->|extract| CTX
+CR -->|file hits| CTX
+OAI -->|fetch docs| WEB
+PW -->|browse| WEB
+PWS --> SS --> ART
+
+BT -.->|optional execute code| SB
+SB --> VFS
+SB --> CTX
+SB -->|calls| LLM
+
+DAG -->|batched subtasks| LLM
+DAG -->|extract and verify| CTX
+DAG -->|returns structured results| MAIN
+DAG -->|SkillResult stream| CRW
+DAG -->|strict research extraction gating| VG
+DAG -->|write candidate worktree only| MREPO_STAGING
+DAG -->|merge candidate diffs only| SGOV
+TR -->|SkillResult stream| CRW
+
+HGL --> SGE --> VG
+HSRG --> VG
+LSG --> VG
+LTX --> VG
+PDF -->|evidence objects| SGE
+DOC -->|evidence objects| SGE
+PW -->|evidence objects| SGE
+SGE -->|grounded evidence status| VG
+VG -->|validator state and reason codes| CRW
+
+BT --> RPH --> PRR
+VG -->|pass or fail plus failure packet| PRR
+CRW -->|reward decomposition events| PRR
+PRR -->|outcome and cost metrics| CRW
+CRW -->|negative examples| SGOV
+SGOV -->|skill evolution queue| ETS
+MREPO_STAGING -->|candidate diffs| SGOV
+SGOV -->|merge after gates| MREPO
+MREPO -->|pinned system and top K retrieval| SP
+ETS -->|promotion proposals| VG
+VG -->|authoritative adoption| SBV
+
+EBI --> DV --> ND
+DV --> VG
+DV -->|E2E checks| PW
+DV -->|screenshots| PWS
+
+PRR -->|write artefacts| ART
+ART -->|pointers| SCR
+PRR --> SGOV --> SCR
+PRR -->|experience packets| MREPO
+IDLE -->|uses reports and scratchpad| SGOV
+IDLE -->|reflection and defrag jobs| MREPO
+IDLE -->|resume lookup and freshness reads| LETTA
+IDLE -->|triggers maintenance runbooks| TR
+IDLE -->|can schedule targeted evals| DV
+
+REPO -->|scan targets| CR
+REPO -->|document inputs| PDF
+REPO -->|document inputs| DOC
+REPO -->|runbook files| TR
+REPO -->|build test targets| DV
+MAIN -->|HTTP| LLM
+OAI -->|HTTP| WEB
+PW -->|HTTP| WEB
+SP -->|retrieve external context read only| LETTA
+SP -->|preflight sync| LETTA
+LETTA -->|cached retrieval set| SP
+LETTA -->|pointer metadata only| SGOV
+LETTA -->|retrieval refs and hashes| PRR
+PRR -->|stage draft memory| SGOV
+SGOV -->|gated publish| LETTA
+LETTA -->|pointer ids/hashes| MREPO
+
+TP --> TS --> CP --> GATE
+ART -->|run artefact refs| TS
+VG -->|acceptance truth| TS
+SGOV -->|merge audit refs| TS
+CP -->|checkpoint output| SCR
+
+CIL --> CIV --> CIP --> CRG --> CCK --> CRK --> CGN --> CID --> SIC
+CIV -->|enforces v2 contracts| VG
+CIP -->|enforces merge and reward policy| VG
+CRG -->|reason-code stability| PRR
+CGN -->|deterministic checkpoint computation| GATE
+CID -->|blocks docs drift| PRR
+SIC -->|verifies explicit and description-based skill routing| SP
+
+classDef actor fill:#fff3cd,stroke:#b38600,stroke-width:1px,color:#111;
+classDef orch fill:#d1ecf1,stroke:#0c5460,stroke-width:1px,color:#111;
+classDef reason fill:#e2e3ff,stroke:#3b3f9f,stroke-width:1px,color:#111;
+classDef io fill:#d4edda,stroke:#155724,stroke-width:1px,color:#111;
+classDef safety fill:#f8d7da,stroke:#721c24,stroke-width:1px,color:#111;
+classDef deploy fill:#fdebd0,stroke:#9a6b00,stroke-width:1px,color:#111;
+classDef learn fill:#e8daef,stroke:#5b2c6f,stroke-width:1px,color:#111;
+classDef sandbox fill:#d6eaf8,stroke:#1b4f72,stroke-width:1px,color:#111;
+classDef store fill:#f2f3f4,stroke:#566573,stroke-width:1px,color:#111;
+classDef external fill:#fdfefe,stroke:#1f618d,stroke-width:1px,color:#111;
+classDef module fill:#f7f7f7,stroke:#555,stroke-width:1px,stroke-dasharray: 6 4,color:#111;
