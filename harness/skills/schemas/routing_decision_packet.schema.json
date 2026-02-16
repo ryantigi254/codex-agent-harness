@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "routing_decision_packet.schema.json",
+  "title": "RoutingDecisionPacketV1",
+  "type": "object",
+  "required": ["step_id", "candidate_models", "chosen_model", "confidence", "budget_state", "justification_code"],
+  "properties": {
+    "step_id": { "type": "string" },
+    "candidate_models": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["model_id"],
+        "properties": {
+          "model_id": { "type": "string" },
+          "estimated_cost": { "type": "number", "minimum": 0 },
+          "estimated_latency_ms": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "chosen_model": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "budget_state": {
+      "type": "object",
+      "required": ["remaining_tokens", "remaining_time_ms"],
+      "properties": {
+        "remaining_tokens": { "type": "integer", "minimum": 0 },
+        "remaining_time_ms": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "justification_code": { "type": "string" },
+    "validator_risk": { "type": "string" }
+  },
+  "additionalProperties": false
+}

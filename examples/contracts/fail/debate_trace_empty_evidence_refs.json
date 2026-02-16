@@ -1,0 +1,13 @@
+{
+  "contract": "debate_trace",
+  "expected_errors": [
+    "policy:debate_trace:evidence_refs_non_empty"
+  ],
+  "payload": {
+    "speaker_role": "reviewer",
+    "timestamp": "2026-02-16T13:55:11Z",
+    "claim_id": "claim-7",
+    "counterclaim_id": "counter-7a",
+    "evidence_refs": []
+  }
+}

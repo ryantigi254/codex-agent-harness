@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "edit_trace.schema.json",
+  "title": "EditTraceV1",
+  "type": "object",
+  "required": ["pass_index", "before_hash", "after_hash", "validator_delta", "stop_reason"],
+  "properties": {
+    "pass_index": { "type": "integer", "minimum": 0 },
+    "before_hash": { "type": "string" },
+    "after_hash": { "type": "string" },
+    "validator_delta": {
+      "type": "object",
+      "required": ["delta"],
+      "properties": {
+        "delta": { "type": "number" },
+        "score_before": { "type": "number" },
+        "score_after": { "type": "number" },
+        "validator_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "stop_reason": {
+      "type": "string",
+      "enum": ["continue", "converged", "non_improving", "budget_exceeded", "oscillation"]
+    }
+  },
+  "additionalProperties": false
+}

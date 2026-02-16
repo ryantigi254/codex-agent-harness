@@ -1,0 +1,15 @@
+{
+  "contract": "memory_design_candidate",
+  "expected_errors": [
+    "schema:memory_design_candidate:missing:interface_compliant"
+  ],
+  "payload": {
+    "source_run_id": "run-120",
+    "eval_task_ids": [
+      "A01"
+    ],
+    "artefact_refs": [
+      "/tmp/memory_design_candidate.json"
+    ]
+  }
+}

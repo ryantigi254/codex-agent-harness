@@ -1,0 +1,21 @@
+{
+  "contract": "routing_decision_packet",
+  "expected_errors": [
+    "policy:routing_decision_packet:chosen_model_not_in_candidates"
+  ],
+  "payload": {
+    "step_id": "step-4",
+    "candidate_models": [
+      {
+        "model_id": "small-local"
+      }
+    ],
+    "chosen_model": "large-remote",
+    "confidence": 0.65,
+    "budget_state": {
+      "remaining_tokens": 7000,
+      "remaining_time_ms": 54000
+    },
+    "justification_code": "cost_pressure"
+  }
+}

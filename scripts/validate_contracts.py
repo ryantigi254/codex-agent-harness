@@ -188,6 +188,171 @@ def _validate_experience_packet(payload: Any) -> list[str]:
     return errors
 
 
+def _validate_memory_design_candidate(payload: Any) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(payload, dict):
+        return ["schema:memory_design_candidate:type:object_required"]
+
+    required = ["source_run_id", "eval_task_ids", "artefact_refs", "interface_compliant"]
+    errors.extend(_missing(payload, required, "memory_design_candidate"))
+
+    if "source_run_id" in payload and not isinstance(payload.get("source_run_id"), str):
+        errors.append("schema:memory_design_candidate:source_run_id_string_required")
+
+    eval_task_ids = payload.get("eval_task_ids")
+    if isinstance(eval_task_ids, list):
+        if not eval_task_ids:
+            errors.append("policy:memory_design_candidate:eval_task_ids_non_empty")
+        elif not all(isinstance(item, str) for item in eval_task_ids):
+            errors.append("schema:memory_design_candidate:eval_task_ids_items_string_required")
+    elif "eval_task_ids" in payload:
+        errors.append("schema:memory_design_candidate:eval_task_ids_array_required")
+
+    artefact_refs = payload.get("artefact_refs")
+    if isinstance(artefact_refs, list):
+        if not artefact_refs:
+            errors.append("policy:memory_design_candidate:artefact_refs_non_empty")
+        elif not all(isinstance(item, str) for item in artefact_refs):
+            errors.append("schema:memory_design_candidate:artefact_refs_items_string_required")
+    elif "artefact_refs" in payload:
+        errors.append("schema:memory_design_candidate:artefact_refs_array_required")
+
+    if "interface_compliant" in payload and not isinstance(payload.get("interface_compliant"), bool):
+        errors.append("schema:memory_design_candidate:interface_compliant_bool_required")
+
+    if bool(payload.get("forbidden_io_detected")):
+        errors.append("policy:memory_design_candidate:forbidden_io_detected")
+
+    return errors
+
+
+def _validate_edit_trace(payload: Any) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(payload, dict):
+        return ["schema:edit_trace:type:object_required"]
+
+    required = ["pass_index", "before_hash", "after_hash", "validator_delta", "stop_reason"]
+    errors.extend(_missing(payload, required, "edit_trace"))
+
+    pass_index = payload.get("pass_index")
+    if "pass_index" in payload and (not isinstance(pass_index, int) or pass_index < 0):
+        errors.append("schema:edit_trace:pass_index_non_negative_integer_required")
+
+    for key in ("before_hash", "after_hash", "stop_reason"):
+        if key in payload and not isinstance(payload.get(key), str):
+            errors.append(f"schema:edit_trace:{key}_string_required")
+
+    validator_delta = payload.get("validator_delta")
+    if isinstance(validator_delta, dict):
+        if "delta" not in validator_delta:
+            errors.append("schema:edit_trace:validator_delta_missing:delta")
+        elif not isinstance(validator_delta.get("delta"), (int, float)):
+            errors.append("schema:edit_trace:validator_delta_delta_number_required")
+    elif "validator_delta" in payload:
+        errors.append("schema:edit_trace:validator_delta_object_required")
+
+    stop_reason = payload.get("stop_reason")
+    if isinstance(stop_reason, str):
+        allowed = {"continue", "converged", "non_improving", "budget_exceeded", "oscillation"}
+        if stop_reason not in allowed:
+            errors.append("schema:edit_trace:invalid_stop_reason")
+
+    return errors
+
+
+def _validate_routing_decision_packet(payload: Any) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(payload, dict):
+        return ["schema:routing_decision_packet:type:object_required"]
+
+    required = [
+        "step_id",
+        "candidate_models",
+        "chosen_model",
+        "confidence",
+        "budget_state",
+        "justification_code",
+    ]
+    errors.extend(_missing(payload, required, "routing_decision_packet"))
+
+    if "step_id" in payload and not isinstance(payload.get("step_id"), str):
+        errors.append("schema:routing_decision_packet:step_id_string_required")
+
+    candidate_models = payload.get("candidate_models")
+    candidate_ids: list[str] = []
+    if isinstance(candidate_models, list):
+        if not candidate_models:
+            errors.append("policy:routing_decision_packet:candidate_models_non_empty")
+        for idx, model in enumerate(candidate_models):
+            if not isinstance(model, dict):
+                errors.append(f"schema:routing_decision_packet:candidate_models[{idx}]:object_required")
+                continue
+            model_id = model.get("model_id")
+            if not isinstance(model_id, str):
+                errors.append(f"schema:routing_decision_packet:candidate_models[{idx}]:model_id_string_required")
+            else:
+                candidate_ids.append(model_id)
+    elif "candidate_models" in payload:
+        errors.append("schema:routing_decision_packet:candidate_models_array_required")
+
+    chosen_model = payload.get("chosen_model")
+    if "chosen_model" in payload and not isinstance(chosen_model, str):
+        errors.append("schema:routing_decision_packet:chosen_model_string_required")
+    elif isinstance(chosen_model, str) and candidate_ids and chosen_model not in candidate_ids:
+        errors.append("policy:routing_decision_packet:chosen_model_not_in_candidates")
+
+    confidence = payload.get("confidence")
+    if not isinstance(confidence, (int, float)):
+        if "confidence" in payload:
+            errors.append("schema:routing_decision_packet:confidence_number_required")
+    else:
+        c = float(confidence)
+        if c < 0.0 or c > 1.0:
+            errors.append("schema:routing_decision_packet:confidence_out_of_range")
+
+    budget_state = payload.get("budget_state")
+    if isinstance(budget_state, dict):
+        for key in ("remaining_tokens", "remaining_time_ms"):
+            if key not in budget_state:
+                errors.append(f"schema:routing_decision_packet:budget_state_missing:{key}")
+            elif not isinstance(budget_state.get(key), int):
+                errors.append(f"schema:routing_decision_packet:budget_state_{key}_integer_required")
+    elif "budget_state" in payload:
+        errors.append("schema:routing_decision_packet:budget_state_object_required")
+
+    if "justification_code" in payload and not isinstance(payload.get("justification_code"), str):
+        errors.append("schema:routing_decision_packet:justification_code_string_required")
+
+    return errors
+
+
+def _validate_debate_trace(payload: Any) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(payload, dict):
+        return ["schema:debate_trace:type:object_required"]
+
+    required = ["speaker_role", "timestamp", "claim_id", "counterclaim_id", "evidence_refs"]
+    errors.extend(_missing(payload, required, "debate_trace"))
+
+    for key in ("speaker_role", "timestamp", "claim_id"):
+        if key in payload and not isinstance(payload.get(key), str):
+            errors.append(f"schema:debate_trace:{key}_string_required")
+
+    if "counterclaim_id" in payload and payload.get("counterclaim_id") is not None and not isinstance(payload.get("counterclaim_id"), str):
+        errors.append("schema:debate_trace:counterclaim_id_string_or_null_required")
+
+    evidence_refs = payload.get("evidence_refs")
+    if isinstance(evidence_refs, list):
+        if not evidence_refs:
+            errors.append("policy:debate_trace:evidence_refs_non_empty")
+        elif not all(isinstance(item, str) for item in evidence_refs):
+            errors.append("schema:debate_trace:evidence_refs_items_string_required")
+    elif "evidence_refs" in payload:
+        errors.append("schema:debate_trace:evidence_refs_array_required")
+
+    return errors
+
+
 def _validate_merge_policy_case(payload: Any) -> list[str]:
     errors: list[str] = []
     if not isinstance(payload, dict):
@@ -408,6 +573,14 @@ def validate_contract(contract: str, payload: Any, limits: dict[str, int]) -> li
         return _validate_validator_result(payload) + _validate_boundaries(payload, limits, "validator_result")
     if contract == "experience_packet":
         return _validate_experience_packet(payload) + _validate_boundaries(payload, limits, "experience_packet")
+    if contract == "memory_design_candidate":
+        return _validate_memory_design_candidate(payload) + _validate_boundaries(payload, limits, "memory_design_candidate")
+    if contract == "edit_trace":
+        return _validate_edit_trace(payload) + _validate_boundaries(payload, limits, "edit_trace")
+    if contract == "routing_decision_packet":
+        return _validate_routing_decision_packet(payload) + _validate_boundaries(payload, limits, "routing_decision_packet")
+    if contract == "debate_trace":
+        return _validate_debate_trace(payload) + _validate_boundaries(payload, limits, "debate_trace")
     if contract == "merge_authority_policy":
         return _validate_merge_policy_case(payload)
     if contract == "reward_policy":
@@ -452,6 +625,19 @@ def validate_registry(registry: dict[str, Any]) -> list[str]:
         "evidence_object",
         "validator_result",
         "experience_packet",
+        "memory_design_candidate",
+        "edit_trace",
+        "routing_decision_packet",
+        "debate_trace",
+        "output_boundaries",
+        "merge_authority_policy",
+        "reward_policy",
+        "merge_authority_audit",
+        "opportunistic_resume_checkpoint",
+        "harness_task_scorecard",
+        "harness_sufficiency_checkpoint",
+    }
+    required_governance_keys = {
         "output_boundaries",
         "merge_authority_policy",
         "reward_policy",
@@ -472,7 +658,7 @@ def validate_registry(registry: dict[str, Any]) -> list[str]:
     if not isinstance(governance_ids, dict):
         errors.append("registry:governance_contract_ids_object_required")
     else:
-        for key in required_catalog_keys - {"skill_result", "evidence_object", "validator_result", "experience_packet"}:
+        for key in required_governance_keys:
             if key not in governance_ids:
                 errors.append(f"registry:governance_contract_ids_missing:{key}")
             elif governance_ids.get(key) != key:

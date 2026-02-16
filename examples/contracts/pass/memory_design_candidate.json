@@ -1,0 +1,18 @@
+{
+  "contract": "memory_design_candidate",
+  "payload": {
+    "source_run_id": "run-120",
+    "eval_task_ids": [
+      "A01",
+      "A03"
+    ],
+    "artefact_refs": [
+      "/tmp/memory_design_candidate.json",
+      "/tmp/eval_log.json"
+    ],
+    "interface_compliant": true,
+    "forbidden_io_detected": false,
+    "score": 0.71,
+    "notes": "Candidate emitted from ETS distillation loop"
+  }
+}

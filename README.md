@@ -39,6 +39,10 @@ A reusable harness for orchestrating agent skills with evidence-first execution,
 - `EvidenceObject`: `harness/skills/schemas/evidence_object.schema.json`
 - `ValidatorResult`: `harness/skills/schemas/validator_result.schema.json`
 - `ExperiencePacket`: `harness/skills/schemas/experience_packet.schema.json`
+- `memory_design_candidate`: `harness/skills/schemas/memory_design_candidate.schema.json`
+- `edit_trace`: `harness/skills/schemas/edit_trace.schema.json`
+- `routing_decision_packet`: `harness/skills/schemas/routing_decision_packet.schema.json`
+- `debate_trace`: `harness/skills/schemas/debate_trace.schema.json`
 - `harness_task_scorecard`: `harness/skills/schemas/harness_task_scorecard.schema.json`
 - `harness_sufficiency_checkpoint`: `harness/skills/schemas/harness_sufficiency_checkpoint.schema.json`
 - Output boundaries: `harness/skills/schemas/output_boundaries.schema.json`
@@ -58,6 +62,7 @@ A reusable harness for orchestrating agent skills with evidence-first execution,
 - `contracts-validate-strict`: strict contract + fixture + fuzz validation.
 - `policy-gates`: merge-authority and reward anti-gaming checks.
 - `regression-pack`: known-good/known-bad stable reason-code checks.
+- `json-render-smoke`: schema-authoritative JSON render smoke check with fail-closed invalid-input path.
 - `checkpoint-contracts`: strict checkpoint schema and fixture enforcement.
 - `checkpoint-regression-pack`: checkpoint-specific reason-code stability checks.
 - `checkpoint-go-no-go-script`: deterministic dry-run validation for checkpoint computation.

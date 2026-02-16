@@ -1,0 +1,25 @@
+{
+  "contract": "routing_decision_packet",
+  "payload": {
+    "step_id": "step-4",
+    "candidate_models": [
+      {
+        "model_id": "small-local",
+        "estimated_cost": 0.02,
+        "estimated_latency_ms": 240
+      },
+      {
+        "model_id": "large-remote",
+        "estimated_cost": 0.14,
+        "estimated_latency_ms": 860
+      }
+    ],
+    "chosen_model": "large-remote",
+    "confidence": 0.78,
+    "budget_state": {
+      "remaining_tokens": 11000,
+      "remaining_time_ms": 92000
+    },
+    "justification_code": "validator_risk_high"
+  }
+}

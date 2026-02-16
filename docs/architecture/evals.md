@@ -24,6 +24,7 @@ Runbooks and examples provide repeatable checks for orchestration and contract c
 - `contracts-validate-strict`
 - `policy-gates`
 - `regression-pack`
+- `json-render-smoke`
 - `checkpoint-contracts`
 - `checkpoint-regression-pack`
 - `checkpoint-go-no-go-script`

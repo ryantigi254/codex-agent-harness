@@ -1,0 +1,15 @@
+{
+  "contract": "edit_trace",
+  "payload": {
+    "pass_index": 1,
+    "before_hash": "c1b2f91",
+    "after_hash": "d43ac20",
+    "validator_delta": {
+      "delta": 0.24,
+      "score_before": 0.51,
+      "score_after": 0.75,
+      "validator_id": "schema_gate"
+    },
+    "stop_reason": "converged"
+  }
+}

@@ -6,6 +6,10 @@
     {"contract": "evidence_object", "fixture": "pass/evidence_object.json", "must_pass": true, "expected_errors": []},
     {"contract": "validator_result", "fixture": "pass/validator_result.json", "must_pass": true, "expected_errors": []},
     {"contract": "experience_packet", "fixture": "pass/experience_packet.json", "must_pass": true, "expected_errors": []},
+    {"contract": "memory_design_candidate", "fixture": "pass/memory_design_candidate.json", "must_pass": true, "expected_errors": []},
+    {"contract": "edit_trace", "fixture": "pass/edit_trace.json", "must_pass": true, "expected_errors": []},
+    {"contract": "routing_decision_packet", "fixture": "pass/routing_decision_packet.json", "must_pass": true, "expected_errors": []},
+    {"contract": "debate_trace", "fixture": "pass/debate_trace.json", "must_pass": true, "expected_errors": []},
     {"contract": "merge_authority_audit", "fixture": "pass/merge_authority_audit.json", "must_pass": true, "expected_errors": []},
     {"contract": "opportunistic_resume_checkpoint", "fixture": "pass/opportunistic_resume_checkpoint.json", "must_pass": true, "expected_errors": []}
   ]

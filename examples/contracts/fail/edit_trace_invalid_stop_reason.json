@@ -1,0 +1,15 @@
+{
+  "contract": "edit_trace",
+  "expected_errors": [
+    "schema:edit_trace:invalid_stop_reason"
+  ],
+  "payload": {
+    "pass_index": 0,
+    "before_hash": "c1b2f91",
+    "after_hash": "c1b2f91",
+    "validator_delta": {
+      "delta": 0.0
+    },
+    "stop_reason": "retry_forever"
+  }
+}

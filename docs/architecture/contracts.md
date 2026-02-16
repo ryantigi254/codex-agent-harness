@@ -7,6 +7,10 @@ Skill and gate I/O contracts are strict v2 JSON schemas under `harness/skills/sc
 - `EvidenceObject`: `evidence_object.schema.json`
 - `ValidatorResult`: `validator_result.schema.json`
 - `ExperiencePacket`: `experience_packet.schema.json`
+- `memory_design_candidate`: `memory_design_candidate.schema.json`
+- `edit_trace`: `edit_trace.schema.json`
+- `routing_decision_packet`: `routing_decision_packet.schema.json`
+- `debate_trace`: `debate_trace.schema.json`
 
 ## Governance contracts
 - `output_boundaries`: `output_boundaries.schema.json`
