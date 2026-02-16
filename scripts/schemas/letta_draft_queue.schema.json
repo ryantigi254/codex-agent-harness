@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LettaDraftQueue",
+  "type": "object",
+  "required": ["run_id", "agent_id", "project_id", "drafts"],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "agent_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "drafts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_pointers", "summary", "provenance_tag", "created_at_unix"],
+        "properties": {
+          "source_pointers": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "summary": {"type": "string", "minLength": 1},
+          "provenance_tag": {"type": "string", "enum": ["real", "simulated"]},
+          "created_at_unix": {"type": "integer", "minimum": 0},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "thread_id": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
